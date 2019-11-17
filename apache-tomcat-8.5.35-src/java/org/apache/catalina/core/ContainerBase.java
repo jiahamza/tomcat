@@ -929,6 +929,7 @@ public abstract class ContainerBase extends LifecycleMBeanBase
         }
 
         // Start our child containers, if any
+        // 启动其他字容器.host context wrapper
         Container children[] = findChildren();
         List<Future<Void>> results = new ArrayList<>();
         for (int i = 0; i < children.length; i++) {

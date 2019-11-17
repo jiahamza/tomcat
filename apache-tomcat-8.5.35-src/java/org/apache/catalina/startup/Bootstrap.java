@@ -102,7 +102,7 @@ public final class Bootstrap {
                 homeFile = f.getAbsoluteFile();
             }
         }
-
+        //设置安装目录
         catalinaHomeFile = homeFile;
         System.setProperty(
                 Globals.CATALINA_HOME_PROP, catalinaHomeFile.getPath());
@@ -110,6 +110,7 @@ public final class Bootstrap {
         // Then base
         String base = System.getProperty(Globals.CATALINA_BASE_PROP);
         if (base == null) {
+            //设置工作目录
             catalinaBaseFile = catalinaHomeFile;
         } else {
             File baseFile = new File(base);
@@ -253,16 +254,21 @@ public final class Bootstrap {
      * @throws Exception Fatal initialization error
      */
     public void init() throws Exception {
-
+        //初始化commonLoader(父) CatalinaLoader(common) sharedLoader(web)
         initClassLoaders();
 
-        Thread.currentThread().setContextClassLoader(catalinaLoader);
+        Thread.currentThread().setContextClassLoader(catalinaLoader);//URLClassLoader
 
         SecurityClassLoad.securityClassLoad(catalinaLoader);
 
         // Load our startup class and call its process() method
         if (log.isDebugEnabled())
             log.debug("Loading startup class");
+        //ClassLoader和Class.forName(clazz)的区别
+        //根据运行结果得出Class.forName加载类时将类进了初始化，
+        //而ClassLoader的loadClass并没有对类进行初始化，只是把类加载到了虚拟机中。
+        //而在我们使用JDBC时通常是使用Class.forName()方法来加载数据库连接驱动。
+        //这是因为在JDBC规范中明确要求Driver(数据库驱动)类必须向DriverManager注册自己
         Class<?> startupClass = catalinaLoader.loadClass("org.apache.catalina.startup.Catalina");
         Object startupInstance = startupClass.getConstructor().newInstance();
 
@@ -460,6 +466,7 @@ public final class Bootstrap {
             // Don't set daemon until init() has completed
             Bootstrap bootstrap = new Bootstrap();
             try {
+                //初始化类加载器,CatalinaDaemon
                 bootstrap.init();
             } catch (Throwable t) {
                 handleThrowable(t);

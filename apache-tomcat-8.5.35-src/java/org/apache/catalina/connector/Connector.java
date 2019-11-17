@@ -966,6 +966,7 @@ public class Connector extends LifecycleMBeanBase  {
         super.initInternal();
 
         // Initialize adapter
+        //初始化适配器
         adapter = new CoyoteAdapter(this);
         protocolHandler.setAdapter(adapter);
 

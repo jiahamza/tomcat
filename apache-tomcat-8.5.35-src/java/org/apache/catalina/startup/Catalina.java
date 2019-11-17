@@ -535,13 +535,15 @@ public class Catalina {
         loaded = true;
 
         long t1 = System.nanoTime();
-
+        //初始化目录
         initDirs();
 
         // Before digester - it may be needed
+        //初始化命名空间
         initNaming();
 
         // Create and execute our Digester
+        // 解析Server.xml，最初是用来解析struts-config.xml
         Digester digester = createStartDigester();
 
         InputSource inputSource = null;
