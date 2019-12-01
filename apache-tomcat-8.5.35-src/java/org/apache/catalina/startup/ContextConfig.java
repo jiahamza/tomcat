@@ -768,7 +768,9 @@ public class ContextConfig implements LifecycleListener {
         }
 
         webConfig();
+        //自己加的.避免访问tomcat主页报错
         context.addServletContainerInitializer(new JasperInitializer(),null);
+
         if (!context.getIgnoreAnnotations()) {
             applicationAnnotationsConfig();
         }
@@ -1096,6 +1098,7 @@ public class ContextConfig implements LifecycleListener {
          *   those in JARs excluded from an absolute ordering) need to be
          *   scanned to check if they match.
          */
+        //web.xml解析器
         WebXmlParser webXmlParser = new WebXmlParser(context.getXmlNamespaceAware(),
                 context.getXmlValidation(), context.getXmlBlockExternal());
 

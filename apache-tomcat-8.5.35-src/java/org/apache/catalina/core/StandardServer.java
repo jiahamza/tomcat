@@ -825,7 +825,7 @@ public final class StandardServer extends LifecycleMBeanBase implements Server {
      */
     @Override
     protected void initInternal() throws LifecycleException {
-
+        //将容器注册到JMX中
         super.initInternal();
 
         // Register global String cache

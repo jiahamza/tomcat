@@ -1038,7 +1038,7 @@ public class StandardWrapper extends ContainerBase
                 throw new ServletException
                     (sm.getString("standardWrapper.notClass", getName()));
             }
-
+            // 通用的管理器 管理servlet filter listener
             InstanceManager instanceManager = ((StandardContext)getParent()).getInstanceManager();
             try {
                 servlet = (Servlet) instanceManager.newInstance(servletClass);

@@ -4975,6 +4975,7 @@ public class StandardContext extends ContainerBase
         for (ArrayList<Wrapper> list : map.values()) {
             for (Wrapper wrapper : list) {
                 try {
+                    //调用到StandardWrapper
                     wrapper.load();
                 } catch (ServletException e) {
                     getLogger().error(sm.getString("standardContext.loadOnStartup.loadException",
@@ -5286,6 +5287,7 @@ public class StandardContext extends ContainerBase
             }
 
             // Load and initialize all "load on startup" servlets
+            // 加载并初始化所有有load on startup servlet
             if (ok) {
                 if (!loadOnStartup(findChildren())){
                     log.error(sm.getString("standardContext.servletFail"));

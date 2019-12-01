@@ -919,17 +919,19 @@ public abstract class ContainerBase extends LifecycleMBeanBase
         // Start our subordinate components, if any
         logger = null;
         getLogger();
+        //集群相关
         Cluster cluster = getClusterInternal();
         if (cluster instanceof Lifecycle) {
             ((Lifecycle) cluster).start();
         }
+        //域,安全相关
         Realm realm = getRealmInternal();
         if (realm instanceof Lifecycle) {
             ((Lifecycle) realm).start();
         }
 
         // Start our child containers, if any
-        // 启动其他字容器.host context wrapper
+        // 启动其他子容器.host context wrapper
         Container children[] = findChildren();
         List<Future<Void>> results = new ArrayList<>();
         for (int i = 0; i < children.length; i++) {

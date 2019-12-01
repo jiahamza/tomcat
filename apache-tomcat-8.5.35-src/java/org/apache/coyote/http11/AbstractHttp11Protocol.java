@@ -869,7 +869,7 @@ public abstract class AbstractHttp11Protocol<S> extends AbstractProtocol<S> {
 
 
     // ------------------------------------------------------------- Common code
-
+   // 请求流程: 3.08_01 获取processor
     @SuppressWarnings("deprecation")
     @Override
     protected Processor createProcessor() {
@@ -878,6 +878,7 @@ public abstract class AbstractHttp11Protocol<S> extends AbstractProtocol<S> {
                 getMaxTrailerSize(), allowedTrailerHeaders, getMaxExtensionSize(),
                 getMaxSwallowSize(), httpUpgradeProtocols, getSendReasonPhrase(),
                 relaxedPathChars, relaxedQueryChars);
+        //设置适配器
         processor.setAdapter(getAdapter());
         processor.setMaxKeepAliveRequests(getMaxKeepAliveRequests());
         processor.setConnectionUploadTimeout(getConnectionUploadTimeout());
@@ -888,6 +889,7 @@ public abstract class AbstractHttp11Protocol<S> extends AbstractProtocol<S> {
         processor.setCompressibleMimeTypes(getCompressibleMimeTypes());
         processor.setRestrictedUserAgents(getRestrictedUserAgents());
         processor.setMaxSavePostSize(getMaxSavePostSize());
+        //设置server
         processor.setServer(getServer());
         processor.setServerRemoveAppProvidedValues(getServerRemoveAppProvidedValues());
         return processor;

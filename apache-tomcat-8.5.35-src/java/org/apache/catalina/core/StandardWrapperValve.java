@@ -130,6 +130,7 @@ final class StandardWrapperValve
         // Allocate a servlet instance to process this request
         try {
             if (!unavailable) {
+                // 请求流程: 3.15 延迟,第一次请求的时候加载servlet
                 servlet = wrapper.allocate();
             }
         } catch (UnavailableException e) {
@@ -168,6 +169,7 @@ final class StandardWrapperValve
         request.setAttribute(Globals.DISPATCHER_REQUEST_PATH_ATTR,
                 requestPathMB);
         // Create the filter chain for this request
+        // 请求流程: 3.16 创建 filter chain
         ApplicationFilterChain filterChain =
                 ApplicationFilterFactory.createFilterChain(request, wrapper, servlet);
 
@@ -182,6 +184,7 @@ final class StandardWrapperValve
                         if (request.isAsyncDispatching()) {
                             request.getAsyncContextInternal().doInternalDispatch();
                         } else {
+                            // 请求流程: 3.17调用请求的filter chain.
                             filterChain.doFilter(request.getRequest(),
                                     response.getResponse());
                         }

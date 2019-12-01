@@ -46,6 +46,7 @@ public abstract class SocketProcessorBase<S> implements Runnable {
             if (socketWrapper.isClosed()) {
                 return;
             }
+            // 请求流程: 3.05 执行processor的run方法
             doRun();
         }
     }

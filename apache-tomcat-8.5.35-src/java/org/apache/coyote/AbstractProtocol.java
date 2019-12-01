@@ -791,6 +791,7 @@ public abstract class AbstractProtocol<S> implements ProtocolHandler,
                     }
                 }
                 if (processor == null) {
+                    // 请求流程: 3.08 获取processor
                     processor = getProtocol().createProcessor();
                     register(processor);
                 }
@@ -803,6 +804,7 @@ public abstract class AbstractProtocol<S> implements ProtocolHandler,
 
                 SocketState state = SocketState.CLOSED;
                 do {
+                    // 请求流程: 3.09 执行processor
                     state = processor.process(wrapper, status);
 
                     if (state == SocketState.UPGRADING) {

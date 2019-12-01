@@ -137,6 +137,7 @@ final class StandardHostValve extends ValveBase {
             // defined error pages.
             try {
                 if (!asyncAtStart || asyncDispatching) {
+                    // 请求流程: 3.13 获取context的pipeline,得到context的valve并执行逻辑
                     context.getPipeline().getFirst().invoke(request, response);
                 } else {
                     // Make sure this request/response is here because an error

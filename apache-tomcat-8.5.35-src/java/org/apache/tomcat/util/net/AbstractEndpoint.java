@@ -1038,6 +1038,7 @@ public abstract class AbstractEndpoint<S> {
             if (socketWrapper == null) {
                 return false;
             }
+            //创建socket processor
             SocketProcessorBase<S> sc = processorCache.pop();
             if (sc == null) {
                 sc = createSocketProcessor(socketWrapper, event);
@@ -1046,6 +1047,7 @@ public abstract class AbstractEndpoint<S> {
             }
             Executor executor = getExecutor();
             if (dispatch && executor != null) {
+                // 请求流程: 3.04 线程池执行processor
                 executor.execute(sc);
             } else {
                 sc.run();

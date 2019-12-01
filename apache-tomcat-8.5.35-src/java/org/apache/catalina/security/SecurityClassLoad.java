@@ -31,7 +31,7 @@ public final class SecurityClassLoad {
     }
 
     static void securityClassLoad(ClassLoader loader, boolean requireSecurityManager) throws Exception {
-
+        //默认进入返回
         if (requireSecurityManager && System.getSecurityManager() == null) {
             return;
         }

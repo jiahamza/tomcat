@@ -144,11 +144,13 @@ public final class Bootstrap {
 
     private void initClassLoaders() {
         try {
+            //设置公用的类加载器,其父加载器为null
             commonLoader = createClassLoader("common", null);
             if( commonLoader == null ) {
                 // no config file, default to this loader - we might be in a 'single' env.
                 commonLoader=this.getClass().getClassLoader();
             }
+            //
             catalinaLoader = createClassLoader("server", commonLoader);
             sharedLoader = createClassLoader("shared", commonLoader);
         } catch (Throwable t) {
@@ -254,11 +256,11 @@ public final class Bootstrap {
      * @throws Exception Fatal initialization error
      */
     public void init() throws Exception {
-        //初始化commonLoader(父) CatalinaLoader(common) sharedLoader(web)
+        //初始化commonLoader(父) CatalinaLoader(common) sharedLoader(web)。违背双亲委派模型
         initClassLoaders();
-
+        //设置线程上下文类加载器
         Thread.currentThread().setContextClassLoader(catalinaLoader);//URLClassLoader
-
+        //加载tomcat所需要的class 检查是否安全,不安全直接结束
         SecurityClassLoad.securityClassLoad(catalinaLoader);
 
         // Load our startup class and call its process() method
@@ -269,8 +271,8 @@ public final class Bootstrap {
         //而ClassLoader的loadClass并没有对类进行初始化，只是把类加载到了虚拟机中。
         //而在我们使用JDBC时通常是使用Class.forName()方法来加载数据库连接驱动。
         //这是因为在JDBC规范中明确要求Driver(数据库驱动)类必须向DriverManager注册自己
-        Class<?> startupClass = catalinaLoader.loadClass("org.apache.catalina.startup.Catalina");
-        Object startupInstance = startupClass.getConstructor().newInstance();
+        Class<?> startupClass = catalinaLoader.loadClass("org.apache.catalina.startup.Catalina");//加载Catalina主类
+        Object startupInstance = startupClass.getConstructor().newInstance();//反射获取实例
 
         // Set the shared extensions class loader
         if (log.isDebugEnabled())
@@ -281,10 +283,11 @@ public final class Bootstrap {
         Object paramValues[] = new Object[1];
         paramValues[0] = sharedLoader;
         Method method =
-            startupInstance.getClass().getMethod(methodName, paramTypes);
-        method.invoke(startupInstance, paramValues);
+            startupInstance.getClass().getMethod(methodName, paramTypes);//获取setParentClassLoader方法
+        method.invoke(startupInstance, paramValues);//父类加载器设置为sharedLoader
 
-        catalinaDaemon = startupInstance;
+        catalinaDaemon = startupInstance;//catalinaDaemon = new Catalina();
+
 
     }
 
